@@ -1,0 +1,13 @@
+.Header-head {
+    text-align: left;
+    background-color: black;
+    color: white;
+    height: 70px;
+    font-size: 30px;
+}
+
+.Header-text {
+    position: relative;
+    left: 30px;
+    top: 10px;
+}
