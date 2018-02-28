@@ -11,6 +11,7 @@ class Container extends React.Component {
       username: '',
       page: 1,
       users: [],
+      // value: [],
       leaderboard: [],
       score: 0,
       ques: [],
@@ -18,6 +19,13 @@ class Container extends React.Component {
       ctr: 0,
     };
     this.getUsers();
+  }
+
+  onClickHandler2 = () => {
+    this.setState({
+      page: 1,
+      username: '',
+    });
   }
 
   onClickHandler1 = () => {
@@ -226,6 +234,7 @@ class Container extends React.Component {
       const rows = [];
       for (let i = 0; i < this.state.ques.length; i += 1) {
         rows.push(<QuestionCard
+          qno={i + 1}
           username={this.state.username}
           ques={this.state.ques[i]}
           score={this.state.score}
@@ -246,25 +255,28 @@ class Container extends React.Component {
     const rows = [];
     for (let i = 0; i < this.state.leaderboard.length; i += 1) {
       rows.push(<div className="Container-leaders">
-        <span className="Container-username">{this.state.leaderboard[i].username}</span>
-        <span className="Container-score">{this.state.leaderboard[i].score}</span>
+        <span className="Container-username"><span className="Container-leaders-black">{i + 1}.</span> {this.state.leaderboard[i].username}</span>
+        <span className="Container-scores">{this.state.leaderboard[i].score}</span>
                 </div>);
     }
     return (
       <div>
         <div className="Container-usr">
-          {this.state.username}
+          Hello {this.state.username}
         </div>
         <div className="Container-pg3">
           <div className="Container-text">
               Your Score
           </div>
           <div className="Container-score">
-            {this.state.score}<span className="Container-sl">/</span>{this.state.answered.length}
+            {this.state.score}<span className="Container-sl">/{this.state.answered.length}</span>
           </div>
           <div className="Container-leaderboard">
             {rows}
           </div>
+        </div>
+        <div className="Container-playagain">
+          <button onClick={() => { this.onClickHandler2(); }}>Play Again</button>
         </div>
       </div>
     );

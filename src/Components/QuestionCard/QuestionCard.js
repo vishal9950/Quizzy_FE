@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { PropTypes } from 'prop-types';
 import RadioButton from '../RadioButton/RadioButton';
+import './QuestionCard.css';
 
 class QuestionCard extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class QuestionCard extends React.Component {
       score: PropTypes.number.isRequired,
       ques: PropTypes.object.isRequired,
       onChange: PropTypes.func.isRequired,
+      qno: PropTypes.number.isRequired,
     };
     this.getOptions();
   }
@@ -37,9 +39,11 @@ class QuestionCard extends React.Component {
         onChange={event => onChange(event, this.props.ques.quesid)}
       />);
     }
+
     console.log(rows);
     return (
       <div className="QuestionCard-outer">
+        <div className="QuestionCard-no">Question {this.props.qno}</div>
         <div className="QuestionCard-ques">
           {this.props.ques.ques}
         </div>
