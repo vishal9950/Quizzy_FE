@@ -13,16 +13,21 @@ class LoginCard extends React.Component {
 
     LoginCard.propTypes = {
       onChange: PropTypes.func.isRequired,
+      onClick: PropTypes.func.isRequired,
       username: PropTypes.string.isRequired,
     };
   }
 
   render() {
-    const { onChange } = this.props;
+    const { onChange, onClick } = this.props;
     return (
       <div>
         <LoginGreet />
-        <LoginForm username={this.props.username} onChange={event => onChange(event)} />
+        <LoginForm
+          onClick={onClick}
+          username={this.props.username}
+          onChange={event => onChange(event)}
+        />
       </div>
     );
   }

@@ -7,6 +7,7 @@ module.exports = {
     },
     "rules": {
         "react/jsx-filename-extension": 0,
-        "jsx-a11y/label-has-for": 0
+        "jsx-a11y/label-has-for": 0,
+        "react/forbid-prop-types": 0
     }
 };

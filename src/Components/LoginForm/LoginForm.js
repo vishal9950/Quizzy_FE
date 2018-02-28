@@ -10,18 +10,19 @@ class LoginForm extends React.Component {
 
     LoginForm.propTypes = {
       onChange: PropTypes.func.isRequired,
+      onClick: PropTypes.func.isRequired,
       username: PropTypes.string.isRequired,
     };
   }
 
   render() {
-    const { onChange } = this.props;
+    const { onChange, onClick } = this.props;
     return (
       <div className="LoginForm-outer">
         <div className="LoginForm-text">Login</div>
         <div><label>Username</label></div>
         <div><input value={this.props.username} type="text" onChange={onChange} /></div>
-        <div><button>Login</button></div>
+        <div><button onClick={onClick}>Login</button></div>
       </div>
     );
   }
