@@ -48,9 +48,21 @@ class Container extends React.Component {
         console.log('here2');
         const temp = this.state.answered;
         temp[j].rt = true;
-        this.setState({
-          answered: temp,
-          score: this.state.score + 1,
+        temp[j].option = event.target.value;
+        const options = {
+          url: '/users',
+          method: 'POST',
+          data: {
+            username: this.state.username,
+            score: this.state.score + 1,
+          },
+        };
+        axios(options).then(() => {
+          console.log('Score saved!');
+          this.setState({
+            answered: temp,
+            score: this.state.score + 1,
+          });
         });
       } else if (j !== this.state.answered.length && flag === 1) {
         console.log('here3');
@@ -59,12 +71,24 @@ class Container extends React.Component {
         });
       } else if (j === this.state.answered.length) {
         console.log('here4');
-        this.setState({
-          answered: this.state.answered.concat({
-            quesid,
-            rt: true,
-          }),
-          score: this.state.score + 1,
+        const options = {
+          url: '/users',
+          method: 'POST',
+          data: {
+            username: this.state.username,
+            score: this.state.score + 1,
+          },
+        };
+        axios(options).then(() => {
+          console.log('Score saved!');
+          this.setState({
+            answered: this.state.answered.concat({
+              quesid,
+              rt: true,
+              option: event.target.value,
+            }),
+            score: this.state.score + 1,
+          });
         });
       }
     }
@@ -79,9 +103,21 @@ class Container extends React.Component {
         console.log('here7');
         const temp = this.state.answered;
         temp[j].rt = false;
-        this.setState({
-          answered: temp,
-          score: this.state.score - 1,
+        temp[j].option = event.target.value;
+        const options = {
+          url: '/users',
+          method: 'POST',
+          data: {
+            username: this.state.username,
+            score: this.state.score - 1,
+          },
+        };
+        axios(options).then(() => {
+          console.log('Score saved!');
+          this.setState({
+            answered: temp,
+            score: this.state.score - 1,
+          });
         });
       } else if (j === this.state.answered.length) {
         console.log('here8');
@@ -89,6 +125,7 @@ class Container extends React.Component {
           answered: this.state.answered.concat({
             quesid,
             rt: false,
+            option: event.target.value,
           }),
         });
       }
