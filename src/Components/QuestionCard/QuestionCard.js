@@ -11,7 +11,9 @@ class QuestionCard extends React.Component {
     };
     QuestionCard.propTypes = {
     //   username: PropTypes.string.isRequired,
+      score: PropTypes.number.isRequired,
       ques: PropTypes.object.isRequired,
+      onChange: PropTypes.func.isRequired,
     };
     this.getOptions();
   }
@@ -25,11 +27,14 @@ class QuestionCard extends React.Component {
   }
 
   render() {
+    const { onChange } = this.props;
     const rows = [];
     for (let i = 0; i < this.state.options.length; i += 1) {
       rows.push(<RadioButton
         value={this.state.options[i].option}
         name={this.props.ques.ques}
+        score={this.props.score}
+        onChange={event => onChange(event, this.props.ques.quesid)}
       />);
     }
     console.log(rows);

@@ -14,8 +14,85 @@ class Container extends React.Component {
       //   state: [],
       score: 0,
       ques: [],
+      answered: [],
+      ctr: 0,
     };
     this.getUsers();
+  }
+
+  onChangeHandler1 = (event, quesid) => {
+    console.log(`here ${event.target.value} ${quesid}`);
+    let i;
+    for (i = 0; i < this.state.ques.length; i += 1) {
+      if (this.state.ques[i].quesid === quesid) {
+        break;
+      }
+    }
+    console.log(`i: igi ${i}`);
+    let flag = 0;
+    let j;
+    for (j = 0; j < this.state.answered.length; j += 1) {
+      console.log('inside for');
+      if (this.state.answered[j].quesid === quesid && this.state.answered[j].rt === true) {
+        flag = 1;
+        break;
+      } else if (this.state.answered[j].quesid === quesid && this.state.answered[j].rt !== true) {
+        flag = 2;
+        break;
+      }
+    }
+    console.log(`j: kjbkhb: ${j}`);
+    if (event.target.value === this.state.ques[i].correctans) {
+      console.log('here1');
+      if (j !== this.state.answered.length && flag === 2) {
+        console.log('here2');
+        const temp = this.state.answered;
+        temp[j].rt = true;
+        this.setState({
+          answered: temp,
+          score: this.state.score + 1,
+        });
+      } else if (j !== this.state.answered.length && flag === 1) {
+        console.log('here3');
+        this.setState({
+          ctr: this.state.ctr + 1,
+        });
+      } else if (j === this.state.answered.length) {
+        console.log('here4');
+        this.setState({
+          answered: this.state.answered.concat({
+            quesid,
+            rt: true,
+          }),
+          score: this.state.score + 1,
+        });
+      }
+    }
+    if (event.target.value !== this.state.ques[i].correctans) {
+      console.log(`here5: j: ${j}`);
+      if (j !== this.state.answered.length && flag === 2) {
+        console.log('here6');
+        this.setState({
+          ctr: this.state.ctr,
+        });
+      } else if (j !== this.state.answered.length && flag === 1) {
+        console.log('here7');
+        const temp = this.state.answered;
+        temp[j].rt = false;
+        this.setState({
+          answered: temp,
+          score: this.state.score - 1,
+        });
+      } else if (j === this.state.answered.length) {
+        console.log('here8');
+        this.setState({
+          answered: this.state.answered.concat({
+            quesid,
+            rt: false,
+          }),
+        });
+      }
+    }
   }
 
   onChangeHandler = (event) => {
@@ -89,6 +166,8 @@ class Container extends React.Component {
         rows.push(<QuestionCard
           username={this.state.username}
           ques={this.state.ques[i]}
+          score={this.state.score}
+          onChange={(event, quesid) => this.onChangeHandler1(event, quesid)}
         />);
       }
       return (

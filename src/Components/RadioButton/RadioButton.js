@@ -11,16 +11,19 @@ class RadioButton extends React.Component {
     RadioButton.propTypes = {
       name: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
+      onChange: PropTypes.func.isRequired,
     };
   }
 
   render() {
+    const { onChange } = this.props;
     return (
       <div className="RadioButton-body">
         <input
           type="radio"
           name={this.props.name}
           value={this.props.value}
+          onChange={onChange}
         />
         <label>{this.props.value}</label>
       </div>
