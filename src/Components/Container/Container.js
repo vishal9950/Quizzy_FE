@@ -36,9 +36,17 @@ class Container extends React.Component {
 
   onClickHandler2 = () => {
     this.setState({
-      page: 1,
       username: '',
+      page: 1,
+      users: [],
+      // value: [],
+      leaderboard: [],
+      score: 0,
+      ques: [],
+      answered: [],
+      ctr: 0,
     });
+    this.getUsers();
   }
 
   onClickHandler1 = () => {
@@ -100,23 +108,35 @@ class Container extends React.Component {
           },
         };
         axios(options).then(() => {
-          // const options1 = {
-          //   url: '/sync',
-          //   method: 'POST',
-          //   data: JSON.stringify(temp),
-          // };
-          // axios(options1).then(() => {
-          console.log('Score saved!');
-          this.setState({
-            answered: temp,
-            score: this.state.score + 1,
+          const options1 = {
+            url: '/sync',
+            method: 'POST',
+            data: JSON.stringify(temp),
+          };
+          axios(options1).then(() => {
+            console.log('Score saved!');
+            this.setState({
+              answered: temp,
+              score: this.state.score + 1,
+            });
           });
         });
-        // });
       } else if (j !== this.state.answered.length && flag === 1) {
-        console.log('here3');
-        this.setState({
-          ctr: this.state.ctr + 1,
+        const temp = this.state.answered;
+        temp[j].rt = true;
+        temp[j].option = event.target.value;
+        temp[j].username = this.state.username;
+        const options = {
+          url: '/sync',
+          method: 'POST',
+          data: JSON.stringify(temp),
+        };
+        axios(options).then(() => {
+          console.log('here3');
+          this.setState({
+            answered: temp,
+            ctr: this.state.ctr + 1,
+          });
         });
       } else if (j === this.state.answered.length) {
         console.log('here4');
@@ -129,37 +149,49 @@ class Container extends React.Component {
           },
         };
         axios(options).then(() => {
-          // const options1 = {
-          //   url: '/sync',
-          //   method: 'POST',
-          //   data: JSON.stringify(this.state.answered.concat({
-          //     quesid,
-          //     rt: true,
-          //     option: event.target.value,
-          //     username: this.state.username,
-          //   })),
-          // };
-          // axios(options1).then(() => {
-          console.log('Score saved!');
-          this.setState({
-            answered: this.state.answered.concat({
+          const options1 = {
+            url: '/sync',
+            method: 'POST',
+            data: JSON.stringify(this.state.answered.concat({
               quesid,
               rt: true,
               option: event.target.value,
               username: this.state.username,
-            }),
-            score: this.state.score + 1,
+            })),
+          };
+          axios(options1).then(() => {
+            console.log('Score saved!');
+            this.setState({
+              answered: this.state.answered.concat({
+                quesid,
+                rt: true,
+                option: event.target.value,
+                username: this.state.username,
+              }),
+              score: this.state.score + 1,
+            });
           });
         });
-        // });
       }
     }
     if (event.target.value !== this.state.ques[i].correctans) {
       console.log(`here5: j: ${j}`);
       if (j !== this.state.answered.length && flag === 2) {
-        console.log('here6');
-        this.setState({
-          ctr: this.state.ctr,
+        const temp = this.state.answered;
+        temp[j].rt = false;
+        temp[j].option = event.target.value;
+        temp[j].username = this.state.username;
+        const options = {
+          url: '/sync',
+          method: 'POST',
+          data: JSON.stringify(temp),
+        };
+        axios(options).then(() => {
+          console.log('here6');
+          this.setState({
+            answered: temp,
+            ctr: this.state.ctr,
+          });
         });
       } else if (j !== this.state.answered.length && flag === 1) {
         console.log('here7');
@@ -176,41 +208,42 @@ class Container extends React.Component {
           },
         };
         axios(options).then(() => {
-          // const options1 = {
-          //   url: '/sync',
-          //   path: 'POST',
-          //   data: JSON.stringify(temp),
-          // };
-          // axios(options1).then(() => {
-          console.log('Score saved!');
-          this.setState({
-            answered: temp,
-            score: this.state.score - 1,
+          console.log('Users');
+          const options1 = {
+            url: '/sync',
+            path: 'POST',
+            data: JSON.stringify(temp),
+          };
+          axios(options1).then(() => {
+            console.log('Score saved!');
+            this.setState({
+              answered: temp,
+              score: this.state.score - 1,
+            });
           });
         });
-        // });
       } else if (j === this.state.answered.length) {
-        // const options = {
-        //   url: '/sync',
-        //   method: 'POST',
-        //   data: JSON.stringify(this.state.answered.concat({
-        //     quesid,
-        //     rt: false,
-        //     option: event.target.value,
-        //     username: this.state.username,
-        //   })),
-        // };
-        // axios(options).then(() => {
-        console.log('here8');
-        this.setState({
-          answered: this.state.answered.concat({
+        const options = {
+          url: '/sync',
+          method: 'POST',
+          data: JSON.stringify(this.state.answered.concat({
             quesid,
             rt: false,
             option: event.target.value,
             username: this.state.username,
-          }),
+          })),
+        };
+        axios(options).then(() => {
+          console.log('here8');
+          this.setState({
+            answered: this.state.answered.concat({
+              quesid,
+              rt: false,
+              option: event.target.value,
+              username: this.state.username,
+            }),
+          });
         });
-        // });
       }
     }
   }
@@ -233,6 +266,20 @@ class Container extends React.Component {
     }
     if (flag === 1) {
       console.log('no');
+      const options = {
+        url: `/sync/${this.state.username}`,
+        method: 'GET',
+      };
+      axios(options).then((state) => {
+        axios.get(`/score/${this.state.username}`).then((scores) => {
+          this.setState({
+            ...this.state,
+            score: scores.data[0].score,
+            answered: state.data,
+            page: 2,
+          });
+        });
+      });
       // axios.get('/state').then((state) => {
 
       // })
@@ -293,17 +340,24 @@ class Container extends React.Component {
           qno={i + 1}
           username={this.state.username}
           ques={this.state.ques[i]}
+          answered={this.state.answered}
           score={this.state.score}
           onChange={(event, quesid) => this.onChangeHandler1(event, quesid)}
         />);
       }
+
+      const buttn = this.state.answered.length === 12 ?
+        (<button onClick={() => { this.onClickHandler1(); }}>Calculate</button>) :
+        (<button>Calculate</button>);
+
       return (
         <div>
           <div className="Container-ques">
             {rows}
           </div>
           <div className="Container-btn">
-            <button onClick={() => { this.onClickHandler1(); }}>Calculate</button>
+            {/* <button onClick={() => { this.onClickHandler1(); }}>Calculate</button> */}
+            {buttn}
           </div>
         </div>
       );
@@ -317,6 +371,7 @@ class Container extends React.Component {
         <span className="Container-scores">{this.state.leaderboard[i].score}</span>
                 </div>);
     }
+
     return (
       <div>
         <div className="Container-usr">

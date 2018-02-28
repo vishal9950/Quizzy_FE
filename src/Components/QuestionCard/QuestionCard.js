@@ -16,6 +16,7 @@ class QuestionCard extends React.Component {
       ques: PropTypes.object.isRequired,
       onChange: PropTypes.func.isRequired,
       qno: PropTypes.number.isRequired,
+      answered: PropTypes.array.isRequired,
     };
     this.getOptions();
   }
@@ -36,6 +37,8 @@ class QuestionCard extends React.Component {
         value={this.state.options[i].option}
         name={this.props.ques.ques}
         score={this.props.score}
+        ques={this.props.ques}
+        answered={this.props.answered}
         onChange={event => onChange(event, this.props.ques.quesid)}
       />);
     }
