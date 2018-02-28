@@ -11,13 +11,32 @@ class Container extends React.Component {
       username: '',
       page: 1,
       users: [],
-      //   state: [],
+      leaderboard: [],
       score: 0,
       ques: [],
       answered: [],
       ctr: 0,
     };
     this.getUsers();
+  }
+
+  onClickHandler1 = () => {
+    const options = {
+      url: '/users',
+      method: 'POST',
+      data: {
+        username: this.state.username,
+        score: this.state.score,
+      },
+    };
+    axios(options).then(() => {
+      axios.get('/leaderboard').then((leaders) => {
+        this.setState({
+          page: 3,
+          leaderboard: leaders.data,
+        });
+      });
+    });
   }
 
   onChangeHandler1 = (event, quesid) => {
@@ -173,6 +192,12 @@ class Container extends React.Component {
     // });
   }
 
+  //   setLeaders = (leaders) => {
+  //     this.setState({
+  //       leaders: [].concat(leaders),
+  //     });
+  //   }
+
   getUsers = () => {
     axios.get('/users').then((allUsers) => {
       axios.post('/ques').then(() => {
@@ -208,13 +233,40 @@ class Container extends React.Component {
         />);
       }
       return (
-        <div className="Container-ques">
-          {rows}
+        <div>
+          <div className="Container-ques">
+            {rows}
+          </div>
+          <div className="Container-btn">
+            <button onClick={() => { this.onClickHandler1(); }}>Calculate</button>
+          </div>
         </div>
       );
     }
+    const rows = [];
+    for (let i = 0; i < this.state.leaderboard.length; i += 1) {
+      rows.push(<div className="Container-leaders">
+        <span className="Container-username">{this.state.leaderboard[i].username}</span>
+        <span className="Container-score">{this.state.leaderboard[i].score}</span>
+                </div>);
+    }
     return (
-      <div>PAGE 3</div>
+      <div>
+        <div className="Container-usr">
+          {this.state.username}
+        </div>
+        <div className="Container-pg3">
+          <div className="Container-text">
+              Your Score
+          </div>
+          <div className="Container-score">
+            {this.state.score}<span className="Container-sl">/</span>{this.state.answered.length}
+          </div>
+          <div className="Container-leaderboard">
+            {rows}
+          </div>
+        </div>
+      </div>
     );
   }
 }

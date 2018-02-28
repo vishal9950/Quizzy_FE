@@ -12,9 +12,9 @@ class LoginGreet extends React.Component {
   render() {
     return (
       <div className="LoginGreet-outer">
-        <div className="LoginGreet-txt">Welcome</div>
-        <div className="LoginGreet-txt">to</div>
-        <div className="LoginGreet-main">Quizzy !</div>
+        <div className="LoginGreet-txt"><div className="Login-txt">Welcome</div></div>
+        <div className="LoginGreet-txt"><div className="Login-txt">to</div></div>
+        <div className="LoginGreet-main"><div id="LoginGreet-logo" className="Login-txt">Quizzy !</div></div>
       </div>
     );
   }

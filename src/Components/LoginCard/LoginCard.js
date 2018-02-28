@@ -21,13 +21,14 @@ class LoginCard extends React.Component {
   render() {
     const { onChange, onClick } = this.props;
     return (
-      <div>
-        <LoginGreet />
-        <LoginForm
+      <div className="LoginCard-outer">
+        <span className="LoginCard-greet"><LoginGreet /></span>
+        <span className="LoginCard-form"><LoginForm
           onClick={onClick}
           username={this.props.username}
           onChange={event => onChange(event)}
         />
+        </span>
       </div>
     );
   }

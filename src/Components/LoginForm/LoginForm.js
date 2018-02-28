@@ -20,9 +20,9 @@ class LoginForm extends React.Component {
     return (
       <div className="LoginForm-outer">
         <div className="LoginForm-text">Login</div>
-        <div><label>Username</label></div>
-        <div><input value={this.props.username} type="text" onChange={onChange} /></div>
-        <div><button onClick={onClick}>Login</button></div>
+        <div className="LoginForm-label"><label>Username</label></div>
+        <div className="LoginForm-inp"><input value={this.props.username} type="text" onChange={onChange} /></div>
+        <div className="LoginForm-btn"><button onClick={onClick}>Login</button></div>
       </div>
     );
   }
