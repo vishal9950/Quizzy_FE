@@ -211,7 +211,7 @@ class Container extends React.Component {
           console.log('Users');
           const options1 = {
             url: '/sync',
-            path: 'POST',
+            method: 'POST',
             data: JSON.stringify(temp),
           };
           axios(options1).then(() => {
