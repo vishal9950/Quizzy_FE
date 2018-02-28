@@ -21,6 +21,19 @@ class Container extends React.Component {
     this.getUsers();
   }
 
+  onClickHandler3 = () => {
+    console.log('ONCLICK3');
+    console.log(JSON.stringify(this.state.answered));
+    const options = {
+      url: '/sync',
+      method: 'POST',
+      data: JSON.stringify(this.state.answered),
+    };
+    axios(options).then(() => {
+      console.log('SYNC');
+    });
+  }
+
   onClickHandler2 = () => {
     this.setState({
       page: 1,
@@ -48,6 +61,7 @@ class Container extends React.Component {
   }
 
   onChangeHandler1 = (event, quesid) => {
+    event.persist();
     console.log(`here ${event.target.value} ${quesid}`);
     let i;
     for (i = 0; i < this.state.ques.length; i += 1) {
@@ -76,6 +90,7 @@ class Container extends React.Component {
         const temp = this.state.answered;
         temp[j].rt = true;
         temp[j].option = event.target.value;
+        temp[j].username = this.state.username;
         const options = {
           url: '/users',
           method: 'POST',
@@ -85,12 +100,19 @@ class Container extends React.Component {
           },
         };
         axios(options).then(() => {
+          // const options1 = {
+          //   url: '/sync',
+          //   method: 'POST',
+          //   data: JSON.stringify(temp),
+          // };
+          // axios(options1).then(() => {
           console.log('Score saved!');
           this.setState({
             answered: temp,
             score: this.state.score + 1,
           });
         });
+        // });
       } else if (j !== this.state.answered.length && flag === 1) {
         console.log('here3');
         this.setState({
@@ -107,16 +129,29 @@ class Container extends React.Component {
           },
         };
         axios(options).then(() => {
+          // const options1 = {
+          //   url: '/sync',
+          //   method: 'POST',
+          //   data: JSON.stringify(this.state.answered.concat({
+          //     quesid,
+          //     rt: true,
+          //     option: event.target.value,
+          //     username: this.state.username,
+          //   })),
+          // };
+          // axios(options1).then(() => {
           console.log('Score saved!');
           this.setState({
             answered: this.state.answered.concat({
               quesid,
               rt: true,
               option: event.target.value,
+              username: this.state.username,
             }),
             score: this.state.score + 1,
           });
         });
+        // });
       }
     }
     if (event.target.value !== this.state.ques[i].correctans) {
@@ -131,6 +166,7 @@ class Container extends React.Component {
         const temp = this.state.answered;
         temp[j].rt = false;
         temp[j].option = event.target.value;
+        temp[j].username = this.state.username;
         const options = {
           url: '/users',
           method: 'POST',
@@ -140,21 +176,41 @@ class Container extends React.Component {
           },
         };
         axios(options).then(() => {
+          // const options1 = {
+          //   url: '/sync',
+          //   path: 'POST',
+          //   data: JSON.stringify(temp),
+          // };
+          // axios(options1).then(() => {
           console.log('Score saved!');
           this.setState({
             answered: temp,
             score: this.state.score - 1,
           });
         });
+        // });
       } else if (j === this.state.answered.length) {
+        // const options = {
+        //   url: '/sync',
+        //   method: 'POST',
+        //   data: JSON.stringify(this.state.answered.concat({
+        //     quesid,
+        //     rt: false,
+        //     option: event.target.value,
+        //     username: this.state.username,
+        //   })),
+        // };
+        // axios(options).then(() => {
         console.log('here8');
         this.setState({
           answered: this.state.answered.concat({
             quesid,
             rt: false,
             option: event.target.value,
+            username: this.state.username,
           }),
         });
+        // });
       }
     }
   }
@@ -255,7 +311,9 @@ class Container extends React.Component {
     const rows = [];
     for (let i = 0; i < this.state.leaderboard.length; i += 1) {
       rows.push(<div className="Container-leaders">
-        <span className="Container-username"><span className="Container-leaders-black">{i + 1}.</span> {this.state.leaderboard[i].username}</span>
+        <span className="Container-username"><span className="Container-leaders-black">{i + 1}.</span>
+          <span className={this.state.username === this.state.leaderboard[i].username ? 'Container-userRED' : ''}>{this.state.leaderboard[i].username}</span>
+        </span>
         <span className="Container-scores">{this.state.leaderboard[i].score}</span>
                 </div>);
     }

@@ -24,7 +24,7 @@ class RadioButton extends React.Component {
           type="radio"
           name={this.props.name}
           value={this.props.value}
-          onChange={onChange}
+          onChange={(event) => { onChange(event); }}
         />
         <label>{this.props.value}</label>
       </div>
