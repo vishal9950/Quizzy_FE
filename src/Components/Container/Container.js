@@ -311,13 +311,22 @@ class Container extends React.Component {
 
   getUsers = () => {
     axios.get('/users').then((allUsers) => {
-      axios.post('/ques').then(() => {
-        axios.get('/ques').then((allQues) => {
-          this.setState({
-            users: allUsers.data,
-            ques: allQues.data,
-          });
+      axios.get('/ques').then((allQues) => {
+        this.setState({
+          users: allUsers.data,
+          ques: allQues.data,
         });
+      }).then(() => {
+        if (this.state.ques.length === 0) {
+          axios.post('/ques').then(() => {
+            axios.get('/ques').then((allQues) => {
+              this.setState({
+                users: allUsers.data,
+                ques: allQues.data,
+              });
+            });
+          });
+        }
       });
     });
   }
@@ -346,7 +355,7 @@ class Container extends React.Component {
         />);
       }
 
-      const buttn = this.state.answered.length === 12 ?
+      const buttn = this.state.answered.length === this.state.ques.length ?
         (<button onClick={() => { this.onClickHandler1(); }}>Calculate</button>) :
         (<button>Calculate</button>);
 
